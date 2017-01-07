@@ -1,13 +1,15 @@
-import obj
 import pygame
+
+import obj
 
 pygame.init()
 box_size = 10
-wide = box_size*10
-high = box_size*20
-screen = pygame.display.set_mode((wide, high))
+wide = 10
+high = 20
+screen = pygame.display.set_mode((wide*box_size, high*box_size))
 clock = pygame.time.Clock()
 pos = []
+line = []
 obj_y = 0
 obj_x = 5
 ch_x = 0
@@ -35,23 +37,23 @@ while IN:
     pos.extend(cent.Ret_list())
     for fig in pos:
         obj.Box(screen,fig[0],fig[1],box_size).Draw()
-    print([x for x in cent.Ret_list() if x in pos[:-4]])
-    if 20 in cent.Ret_y() or [x for x in cent.Ret_list() if x in pos[:-5]]:
+    d_board = cent.Ret_y()
+    if 19 in d_board or [x for x in cent.Ret_list() if x in pos[:-5]]:
         obj_y = 0
+        for cords in cent.Ret_list():
+            line.append(cords[1])
         print("hi")
     else:
-        print (pos)
         del pos[-4:]
-        #del pos[-1]
-        #del pos[0])
-    line = []
-    for cord in pos:
-        line.append(cord[1])
-    for j in range(21):
-        if line.count(j) == 10:
+    print(pos)
+    print(line)
+    for j in range(high):
+        if line.count(j) == wide:
             i = 0
-            while i < 10:
-                del pos[line.index(j)]
+            while i < wide:
+                g = line.index(j)
+                del line[g]
+                del pos[g]
                 i += 1
     pygame.display.update()
     clock.tick(speed)
