@@ -37,8 +37,8 @@ while IN:
     pos.extend(cent.Ret_list())
     for fig in pos:
         obj.Box(screen,fig[0],fig[1],box_size).Draw()
-    d_board = cent.Ret_y()
-    if 19 in d_board or [x for x in cent.Ret_list() if x in pos[:-5]]:
+    print(pos)
+    if 19 in cent.Ret_y() or [x for x in cent.Ret_list() if x in pos[:-5]]:
         obj_y = 0
         for cords in cent.Ret_list():
             line.append(cords[1])
@@ -52,9 +52,11 @@ while IN:
             i = 0
             while i < wide:
                 g = line.index(j)
+                print(g)
                 del line[g]
                 del pos[g]
                 i += 1
+            pos = [[x,y+1] if y < j else [x,y] for x,y in pos]
     pygame.display.update()
     clock.tick(speed)
 pygame.quit()
