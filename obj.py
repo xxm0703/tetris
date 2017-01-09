@@ -24,51 +24,74 @@ class Box(object):
         return [self.x+add_x, self.y+add_y]
 
 class Basic(object):
-    def __init__(self, surface, x, y, box_size):
-        self.display = surface
-        self.box_size = box_size
+    def __init__(self, x, y, L):
         self.x = x
         self.y = y
-    def Rotate(self, List):
-        List = [[x,y]]
-        return
+        self.list_cords = L
+
+    def Ret_x(self):
+        return [x for x, y in self.list_cords]
+
+    def Ret_y(self):
+        return [y for x,y in self.list_cords]
+
+    def Rotate(self):
+        self.list_cords = [[-y, x] for x,y in self.list_cords]
+
     def Param(self, x, y, add_x=0, add_y=0):
         return [x+add_x, y+add_y]
-class O(Basic):
-    def __init__(self, surface, x, y, box_size):
-        Basic.__init__(self,surface,x,y,box_size)
-        self.list_cords = [Basic.Param(self, self.x, self.y), Basic.Param(self, self.x, self.y, add_x=1),
-                           Basic.Param(self, self.x, self.y, add_y=1), Basic.Param(self, self.x, self.y, add_x=1, add_y=1)]
+
     def Ret_list(self):
         return self.list_cords
 
-    def Ret_y(self):
-        return [self.y, self.y+1]
+class O(Basic):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        Basic.__init__(self,self.x,self.y,[Basic.Param(self, self.x, self.y), Basic.Param(self, self.x, self.y, add_x=1),
+                           Basic.Param(self, self.x, self.y, add_y=1), Basic.Param(self, self.x, self.y, add_x=1, add_y=1)])
 
+class I(Basic):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        Basic.__init__(self,self.x,self.y,[Basic.Param(self, self.x, self.y), Basic.Param(self, self.x, self.y, add_x=-1),
+                           Basic.Param(self, self.x, self.y, add_x=1), Basic.Param(self, self.x, self.y, add_x=-2)])
 
 class S(Basic):
-    def __init__(self, surface, x, y, box_size):
-        Basic.__init__(self,surface,x,y,box_size)
-        self.list_cords = [Basic.Param(self, self.x, self.y), Basic.Param(self, self.x, self.y, add_x=1),
-                           Basic.Param(self, self.x, self.y, add_y=1), Basic.Param(self, self.x, self.y, add_x=-1, add_y=1)]
-    def Ret_list(self):
-        return self.list_cords
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        Basic.__init__(self,self.x,self.y,[Basic.Param(self, self.x, self.y), Basic.Param(self, self.x, self.y, add_x=1),
+                           Basic.Param(self, self.x, self.y, add_y=1), Basic.Param(self, self.x, self.y, add_x=-1, add_y=1)])
 
-    def Ret_y(self):
-        return [self.y, self.y+1]
-
-
-class Z(Box):
-    pass
-
-
-class L(Box):
-    pass
+class Z(Basic):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        Basic.__init__(self,self.x,self.y,[Basic.Param(self, self.x, self.y), Basic.Param(self, self.x, self.y, add_x=-1),
+                           Basic.Param(self, self.x, self.y, add_y=1), Basic.Param(self, self.x, self.y, add_x=1, add_y=1)])
 
 
-class J(Box):
-    pass
+class L(Basic):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        Basic.__init__(self,self.x,self.y,[Basic.Param(self, self.x, self.y), Basic.Param(self, self.x, self.y, add_x=1),
+                           Basic.Param(self, self.x, self.y, add_x=-1), Basic.Param(self, self.x, self.y, add_x=-1, add_y=1)])
 
 
-class T(Box):
-    pass
+class J(Basic):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        Basic.__init__(self,self.x,self.y,[Basic.Param(self, self.x, self.y), Basic.Param(self, self.x, self.y, add_x=-1),
+                           Basic.Param(self, self.x, self.y, add_x=1), Basic.Param(self, self.x, self.y, add_x=1, add_y=1)])
+
+
+class T(Basic):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        Basic.__init__(self,self.x,self.y,[Basic.Param(self, self.x, self.y), Basic.Param(self, self.x, self.y, add_x=1),
+                           Basic.Param(self, self.x, self.y, add_x=-1), Basic.Param(self, self.x, self.y, add_y=1)])
