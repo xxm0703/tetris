@@ -35,6 +35,19 @@ class Board:
         else:
             return helper_block
 
+    def clear_line(self):
+        for y in range(self.YSZ):
+            for x in range(self.XSZ):
+                if self.fields[x][y] is None:
+                    break
+            else:
+                for x in range(self.XSZ):
+                    self.fields[x][y] = None
+                for k in range(y - 1, -1, -1):
+                    for j in range(self.XSZ):
+                        self.fields[j][k + 1] = self.fields[j][k]
+                        self.fields[j][k] = None
+
     def __str__(self):
         return self.str_zoom(2)
 
@@ -71,14 +84,18 @@ class Block:
 
 
 board = Board(10, 20)
-s = Shape([Point(0, 0), Point(1, 0), Point(0, 1)])
-b = Block('#', s, Point(5, 0))
-c = Block('*', s, Point(0, 0))
+s1 = Shape([Point(0, 0), Point(1, 0), Point(0, 1)])
+s2 = Shape([Point(0, 0), Point(1, 0), Point(2, 0), Point(3, 0), Point(4, 0), Point(5, 0), Point(6, 0), Point(7, 0)])
+a = Block("%", s2, Point(0, 3))
+b = Block('#', s1, Point(5, 0))
+c = Block('*', s1, Point(8, 3))
+board.place_block(a)
 board.place_block(b)
 board.place_block(c)
 print(board)
 c = board.rotate_block(c)
-board.remove_block(b)
+board.clear_line()
+# board.remove_block(b)
 print(board)
 # c = board.rotate_block(c)
 # print(board)
