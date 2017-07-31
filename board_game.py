@@ -21,6 +21,11 @@ class Block:
     def __init__(self, shape, origin):
         self.shape = shape
         self.cells = tuple([Point(x + origin.x, y + origin.y) for x, y in shape.cells])
+        self.origin = origin
+
+    def drop(self):
+        no = Point(self.origin.x, self.origin.y + 1)
+        return Block(self.shape, no)
 
 
 class Board:
@@ -39,7 +44,7 @@ class Board:
 
     def place_block(self, block):
         for x, y in block.cells:
-            if self.fields[x][y] is not None or 0 > x or x >= self.XSZ:
+            if 0 > x or x >= self.XSZ or y >= self.YSZ or self.fields[x][y] is not None:
                 return False
         for x, y in block.cells:
             self.fields[x][y] = block
@@ -47,12 +52,12 @@ class Board:
 
     def remove_block(self, block):
         for x, y in block.cells:
-            assert self.fields[x][y] is block
+            #            assert self.fields[x][y] is block
             self.fields[x][y] = None
 
     def rotate_block(self):
         bs = self.current.shape.rotate()
-        helper_block = Block(bs, self.current.cells[0])
+        helper_block = Block(bs, self.current.origin)
         self.remove_block(self.current)
         if not self.place_block(helper_block):
             self.place_block(self.current)
@@ -74,7 +79,17 @@ class Board:
                         self.fields[j][k] = None
 
     def change_current(self):
-        self.current = Block(Board.shapes[randint(0, 2)], Point(5, 1))
+        self.current = Block(Board.shapes[randint(0, 2)], Point(5, 0))
+
+    def drop(self):
+        hb = self.current.drop()
+        self.remove_block(self.current)
+        if not self.place_block(hb):
+            self.place_block(self.current)
+            self.change_current()
+            self.clear_line()
+        else:
+            self.current = hb
 
     def __str__(self):
         return self.str_zoom(2)
@@ -96,20 +111,23 @@ def list_to_str(l):
     s += ']'
     return s
 
-board = Board(10, 20)
-s1 = Shape('%', (Point(0, 0), Point(1, 0), Point(0, 1)))
-s2 = Shape('#', (Point(0, 0), Point(1, 0), Point(2, 0), Point(3, 0), Point(4, 0), Point(5, 0), Point(6, 0)))
-a = Block(s2, Point(0, 3))
-b = Block(s1, Point(5, 0))
-c = Block(s1, Point(8, 3))
-board.place_block(a)
-board.place_block(b)
-board.place_block(c)
-print(board)
-print(list_to_str(board.shapes))
-board.rotate_block()
-board.clear_line()
-# board.remove_block(b)
-#print(board)
-board.rotate_block()
-print(list_to_str(board.shapes))
+
+if __name__ == '__main__':
+    board = Board(10, 20)
+    # s1 = Shape('%', (Point(0, 0), Point(1, 0), Point(0, 1)))
+    # s2 = Shape('#', (Point(0, 0), Point(1, 0), Point(2, 0), Point(3, 0), Point(4, 0), Point(5, 0), Point(6, 0)))
+    # a = Block(s2, Point(0, 3))
+    # b = Block(s1, Point(5, 0))
+    # c = Block(s1, Point(8, 3))
+    # board.place_block(a)
+    # board.place_block(b)
+    # board.place_block(c)
+    print(board)
+    board.drop()
+    #    board.rotate_block()
+    board.clear_line()
+    # board.remove_block(b)
+    print(board)
+    board.rotate_block()
+    board.drop()
+    print(board)

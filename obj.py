@@ -23,6 +23,7 @@ class Box(object):
     def Param(self, add_x=0, add_y=0):
         return [self.x+add_x, self.y+add_y]
 
+
 class Basic(object):
     def __init__(self, x, y, L):
         self.x = x
@@ -44,19 +45,28 @@ class Basic(object):
     def Ret_list(self):
         return self.list_cords
 
+    def Drop(self):
+        for x in self.list_cords:
+            x[1] += 1
+
+
 class O(Basic):
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        Basic.__init__(self,self.x,self.y,[Basic.Param(self, self.x, self.y), Basic.Param(self, self.x, self.y, add_x=1),
-                           Basic.Param(self, self.x, self.y, add_y=1), Basic.Param(self, self.x, self.y, add_x=1, add_y=1)])
+        Basic.__init__(self, self.x, self.y,
+                       [Basic.Param(self, self.x, self.y), Basic.Param(self, self.x, self.y, add_x=1),
+                        Basic.Param(self, self.x, self.y, add_y=1),
+                        Basic.Param(self, self.x, self.y, add_x=1, add_y=1)])
+
 
 class I(Basic):
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        Basic.__init__(self,self.x,self.y,[Basic.Param(self, self.x, self.y), Basic.Param(self, self.x, self.y, add_x=-1),
-                           Basic.Param(self, self.x, self.y, add_x=1), Basic.Param(self, self.x, self.y, add_x=-2)])
+        Basic.__init__(self, self.x, self.y,
+                       [Basic.Param(self, self.x, self.y, add_x=-2), Basic.Param(self, self.x, self.y, add_x=-1),
+                        Basic.Param(self, self.x, self.y), Basic.Param(self, self.x, self.y, add_x=1)])
 
 class S(Basic):
     def __init__(self, x, y):
