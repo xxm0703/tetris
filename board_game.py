@@ -24,6 +24,7 @@ class Block:
         self.origin = origin
 
     def move(self, x, y):
+        assert x != 0 or y != 0
         no = Point(self.origin.x + x, self.origin.y + y)
         return Block(self.shape, no)
 

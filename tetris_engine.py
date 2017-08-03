@@ -11,11 +11,14 @@ class Engine:
         self.MPF = 10 // FPS
         self.speed = self.MPF
         self.render = Graphic(board, resolution)
+        self.move = 0
 
     def game_loop(self):
         while True:  # Game Loop
             for x in range(4):
                 self.get_event()
+                if self.move != 0:
+                    self.board.move_block(self.move)
                 self.render.draw()
                 self.render.update()
                 pygame.time.Clock().tick(self.speed)
@@ -30,9 +33,9 @@ class Engine:
             elif event.type == pygame.KEYDOWN:
 
                 if event.key == pygame.K_LEFT:
-                    self.board.move_block(-1)
+                    self.move = -1
                 elif event.key == pygame.K_RIGHT:
-                    self.board.move_block(1)
+                    self.move = 1
 
                 if event.key == pygame.K_UP:
                     self.board.rotate_block()
@@ -42,6 +45,8 @@ class Engine:
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN:
                     self.speed = self.MPF
+                if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
+                    self.move = 0
 
 
 if __name__ == '__main__':

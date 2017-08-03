@@ -24,7 +24,7 @@ class Graphic:
                 if self.board.fields[x][y] is not None:
                     pygame.display.update()
                     pygame.draw.rect(self.screen, Graphic.colors[self.board.fields[x][y].shape.ID],
-                                     [x * self.size, y * self.size, self.size, self.size], 2)
+                                     [x * self.size, y * self.size, self.size, self.size])
 
 
 if __name__ == '__main__':
