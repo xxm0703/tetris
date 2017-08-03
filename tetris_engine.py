@@ -1,29 +1,34 @@
 from board_game import Board
-import pygame
+from render import Graphic
+import pygame, os
 
 pygame.init()
 
 
 class Engine:
-    def __init__(self, FPS, board):
+    def __init__(self, FPS, board, resolution):
         self.board = board
-        self.MPF = 1000 // FPS
+        self.MPF = 10 // FPS
         self.speed = None
+        self.render = Graphic(board, resolution)
 
     def game_loop(self):
         while True:  # Game Loop
             self.speed = self.MPF
             for x in range(4):
                 self.get_event()
-                pygame.time.Clock().tick(100)
-
-            pygame.time.Clock().tick(self.MPF)
+                self.render.draw()
+                self.render.update()
+                pygame.time.Clock().tick(self.speed)
+            pygame.time.Clock().tick(self.speed)
             self.board.drop()
-            print(self.board)
 
     def get_event(self):
         for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
+            if event.type == pygame.QUIT:
+                pygame.quit()
+
+            elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     self.board.rotate_block()
                 elif event.key == pygame.K_DOWN:
@@ -31,5 +36,5 @@ class Engine:
 
 
 if __name__ == '__main__':
-    e = Engine(1, Board(10, 20))
+    e = Engine(1, Board(10, 20), 10)
     e.game_loop()
