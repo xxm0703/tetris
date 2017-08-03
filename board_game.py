@@ -23,8 +23,8 @@ class Block:
         self.cells = tuple([Point(x + origin.x, y + origin.y) for x, y in shape.cells])
         self.origin = origin
 
-    def drop(self):
-        no = Point(self.origin.x, self.origin.y + 1)
+    def move(self, x, y):
+        no = Point(self.origin.x + x, self.origin.y + y)
         return Block(self.shape, no)
 
 
@@ -64,6 +64,14 @@ class Board:
         else:
             self.current = helper_block
 
+    def move_block(self, direct):
+        hb = self.current.move(direct, 0)
+        self.remove_block(self.current)
+        if not self.place_block(hb):
+            self.place_block(self.current)
+        else:
+            self.current = hb
+
     def clear_line(self):
         #TODO
         for y in range(self.YSZ):
@@ -82,7 +90,7 @@ class Board:
         self.current = Block(Board.shapes[randint(0, 2)], Point(5, 0))
 
     def drop(self):
-        hb = self.current.drop()
+        hb = self.current.move(0, 1)
         self.remove_block(self.current)
         if not self.place_block(hb):
             self.place_block(self.current)

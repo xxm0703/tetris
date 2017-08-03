@@ -28,6 +28,12 @@ class Engine:
                 pygame.quit()
 
             elif event.type == pygame.KEYDOWN:
+
+                if event.key == pygame.K_LEFT:
+                    self.board.move_block(-1)
+                elif event.key == pygame.K_RIGHT:
+                    self.board.move_block(1)
+
                 if event.key == pygame.K_UP:
                     self.board.rotate_block()
                 elif event.key == pygame.K_DOWN:
