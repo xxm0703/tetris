@@ -32,7 +32,11 @@ class Block:
 class Board:
     shapes = [Shape('£', (Point(0, 0), Point(1, 0), Point(-1, 0), Point(1, 1))),
               Shape('@', (Point(0, 0), Point(1, 0), Point(2, 0), Point(-1, 0))),
-              Shape('#', (Point(0, 0), Point(1, 0), Point(-1, 0), Point(-1, 1)))]
+              Shape('#', (Point(0, 0), Point(1, 0), Point(-1, 0), Point(-1, 1))),
+              Shape('&', (Point(0, 0), Point(1, 0), Point(0, 1), Point(1, 1))),
+              Shape('*', (Point(0, 0), Point(0, 1), Point(-1, 0), Point(1, 1))),
+              Shape('$', (Point(0, 0), Point(1, 0), Point(0, 1), Point(-1, 1))),
+              Shape('%', (Point(0, 0), Point(1, 0), Point(-1, 0), Point(0, 1))), ]
 
     def __init__(self, XSZ, YSZ):
         self.XSZ = XSZ
@@ -87,8 +91,14 @@ class Board:
                         self.fields[j][k + 1] = self.fields[j][k]
                         self.fields[j][k] = None
 
+    class GameOver(Exception):
+        pass
+
     def change_current(self):
-        self.current = Block(Board.shapes[randint(0, 2)], Point(5, 0))
+        self.current = Block(Board.shapes[randint(0, 6)], Point(5, 0))
+        for x, y in self.current.cells:
+            if self.fields[x][y] is not None:
+                raise Board.GameOver()
 
     def drop(self):
         hb = self.current.move(0, 1)

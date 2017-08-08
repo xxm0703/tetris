@@ -1,6 +1,7 @@
 from board_game import Board
 from render import Graphic
-import pygame, os
+import pygame, sys, os
+
 
 pygame.init()
 
@@ -23,16 +24,25 @@ class Engine:
                 self.render.update()
                 pygame.time.Clock().tick(self.speed)
             pygame.time.Clock().tick(self.speed)
-            self.board.drop()
+            try:
+                self.board.drop()
+            except Board.GameOver:
+                print("Game Over!")
+                pygame.quit()
+                sys.exit()
 
     def get_event(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                sys.exit()
 
             elif event.type == pygame.KEYDOWN:
 
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+
+                elif event.key == pygame.K_LEFT:
                     self.move = -1
                 elif event.key == pygame.K_RIGHT:
                     self.move = 1
@@ -50,5 +60,5 @@ class Engine:
 
 
 if __name__ == '__main__':
-    e = Engine(1, Board(10, 20), 10)
+    e = Engine(1, Board(10, 20), 20)
     e.game_loop()
