@@ -77,19 +77,24 @@ class Board:
         else:
             self.current = hb
 
+    def move_lines(self, point, lines):
+        for k in range(point, -1, -1):
+            for j in range(self.XSZ):
+                self.fields[j][k + lines] = self.fields[j][k]
+                self.fields[j][k] = None
+
     def clear_line(self):
         #TODO
-        for y in range(self.YSZ):
+        k = 0
+        for y in range(self.YSZ - 1, -1, -1):
             for x in range(self.XSZ):
                 if self.fields[x][y] is None:
+                    if k > 0:
+                        self.move_lines(y, k)
+                        k = 0
                     break
             else:
-                for x in range(self.XSZ):
-                    self.fields[x][y] = None
-                for k in range(y - 1, -1, -1):
-                    for j in range(self.XSZ):
-                        self.fields[j][k + 1] = self.fields[j][k]
-                        self.fields[j][k] = None
+                k += 1
 
     class GameOver(Exception):
         pass

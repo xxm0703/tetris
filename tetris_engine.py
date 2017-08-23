@@ -1,6 +1,6 @@
 from board_game import Board
 from render import Graphic
-import pygame, sys, os
+import pygame, sys
 
 
 pygame.init()
@@ -9,10 +9,11 @@ pygame.init()
 class Engine:
     def __init__(self, FPS, board, resolution):
         self.board = board
-        self.MPF = 10 // FPS
+        self.MPF = 1000 // FPS
         self.speed = self.MPF
         self.render = Graphic(board, resolution)
         self.move = 0
+        self.clock = pygame.time.Clock()
 
     def game_loop(self):
         while True:  # Game Loop
@@ -22,8 +23,8 @@ class Engine:
                     self.board.move_block(self.move)
                 self.render.draw()
                 self.render.update()
-                pygame.time.Clock().tick(self.speed)
-            pygame.time.Clock().tick(self.speed)
+                self.clock.tick(self.speed)
+            # self.clock.tick(self.speed)
             try:
                 self.board.drop()
             except Board.GameOver:
@@ -58,7 +59,6 @@ class Engine:
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
                     self.move = 0
 
-
 if __name__ == '__main__':
-    e = Engine(1, Board(10, 20), 20)
+    e = Engine(90, Board(10, 20), 20)
     e.game_loop()
