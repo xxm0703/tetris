@@ -5,7 +5,7 @@ pygame.init()
 
 
 class Graphic:
-    colors = {'£': (255, 0, 0), '@': (0, 255, 0), '#': (0, 0, 255), '%': (255, 255, 0), '$': (0, 255, 255),
+    colors = {'+': (255, 0, 0), '@': (0, 255, 0), '#': (0, 0, 255), '%': (255, 255, 0), '$': (0, 255, 255),
               '&': (255, 0, 255), '*': (0, 0, 0)}
     bg_color = (255, 255, 255)
 
@@ -16,7 +16,8 @@ class Graphic:
         self.high = board.YSZ * resolution
         self.screen = pygame.display.set_mode((self.width, self.high))
 
-    def update(self):
+    @staticmethod
+    def update():
         pygame.display.update()
 
     def draw(self):

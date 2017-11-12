@@ -5,9 +5,9 @@ Cell = collections.namedtuple('Cell', ['x', 'y'])
 
 
 class Shape:
-    def __init__(self, ID, cells):
+    def __init__(self, block_id, cells):
         self.cells = cells
-        self.ID = ID
+        self.ID = block_id
 
     def rotate(self):
         rotated = tuple([Point(-y, x) for x, y in self.cells])
@@ -30,7 +30,7 @@ class Block:
 
 
 class Board:
-    shapes = [Shape('£', (Point(0, 0), Point(1, 0), Point(-1, 0), Point(1, 1))),
+    shapes = [Shape('+', (Point(0, 0), Point(1, 0), Point(-1, 0), Point(1, 1))),
               Shape('@', (Point(0, 0), Point(1, 0), Point(2, 0), Point(-1, 0))),
               Shape('#', (Point(0, 0), Point(1, 0), Point(-1, 0), Point(-1, 1))),
               Shape('&', (Point(0, 0), Point(1, 0), Point(0, 1), Point(1, 1))),
@@ -38,10 +38,10 @@ class Board:
               Shape('$', (Point(0, 0), Point(1, 0), Point(0, 1), Point(-1, 1))),
               Shape('%', (Point(0, 0), Point(1, 0), Point(-1, 0), Point(0, 1))), ]
 
-    def __init__(self, XSZ, YSZ):
-        self.XSZ = XSZ
-        self.YSZ = YSZ
-        self.fields = [[None for _ in range(YSZ)] for _ in range(XSZ)]
+    def __init__(self, xsz, ysz):
+        self.XSZ = xsz
+        self.YSZ = ysz
+        self.fields = [[None for _ in range(ysz)] for _ in range(xsz)]
         self.current = None
         assert self.fields[0] is not self.fields[1]
         self.change_current()
@@ -84,7 +84,6 @@ class Board:
                 self.fields[j][k] = None
 
     def clear_line(self):
-        #TODO
         k = 0
         for y in range(self.YSZ - 1, -1, -1):
             for x in range(self.XSZ):

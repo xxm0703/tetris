@@ -1,16 +1,17 @@
+import pygame
+from json import load
+
 from board_game import Board
 from render import Graphic
-import pygame, sys
-
 
 pygame.init()
 
 
 class Engine:
-    def __init__(self, FPS, board, resolution):
+    def __init__(self, fps, board, resolution):
         self.board = board
-        self.MPF = 1000 // FPS
-        self.speed = self.MPF
+        self.speed = 1000 // fps  # MPF
+        self.MPF = self.speed  # reset
         self.render = Graphic(board, resolution)
         self.move = 0
         self.clock = pygame.time.Clock()
@@ -24,24 +25,23 @@ class Engine:
                 self.render.draw()
                 self.render.update()
                 self.clock.tick(self.speed)
-            # self.clock.tick(self.speed)
             try:
                 self.board.drop()
             except Board.GameOver:
-                print("Game Over!")
                 pygame.quit()
-                sys.exit()
+                exit("Game Over!")
 
     def get_event(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                sys.exit()
+                exit("End Of Game")
 
             elif event.type == pygame.KEYDOWN:
 
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
+                    exit("End Of Game")
 
                 elif event.key == pygame.K_LEFT:
                     self.move = -1
@@ -59,6 +59,10 @@ class Engine:
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
                     self.move = 0
 
+
 if __name__ == '__main__':
-    e = Engine(90, Board(10, 20), 20)
+    with open(".settings.conf", 'r') as f:
+        settings = load(f)
+    settings['speed'] = 110 - settings['speed']
+    e = Engine(settings['speed'], Board(10, 20), settings['resolution'])
     e.game_loop()
